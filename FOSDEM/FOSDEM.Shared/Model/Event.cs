@@ -14,6 +14,8 @@ namespace FOSDEM.Model
 
         public Room Room { get; set; }
 
+        public Day Day { get; set; }
+
         public string Slug { get; set; }
 
         public string Title { get; set; }
@@ -33,5 +35,7 @@ namespace FOSDEM.Model
         public List<Person> Persons { get; set; }
 
         public List<string> Links { get; set; }
+
+        public bool IsSelected { get; set; }
     }
 }

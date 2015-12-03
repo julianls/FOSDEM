@@ -1,6 +1,7 @@
 ﻿using FOSDEM.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,6 +34,8 @@ namespace FOSDEM
 #if WINDOWS_PHONE_APP
         private TransitionCollection transitions;
 #endif
+
+        private const string CacheFileName = "conference.cache";
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -116,10 +119,10 @@ namespace FOSDEM
 
         private void LoadConferenceDataOnStart()
         {
-            if (this.Conference == null)
+            if (Conference == null)
                 LoadFromLocalSorage();
 
-            if (this.Conference == null)
+            if (Conference == null)
                 LoadFromWeb();
         }
 
@@ -128,8 +131,7 @@ namespace FOSDEM
             try
             {
                 var folder = Package.Current.InstalledLocation;
-                string path = "conference.cache";
-                var file = await folder.GetFileAsync(path);
+                var file = await folder.GetFileAsync(CacheFileName);
                 var read = await FileIO.ReadTextAsync(file);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(Conference));
@@ -139,9 +141,9 @@ namespace FOSDEM
                     this.Conference = serializer.Deserialize(reader) as Conference;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.WriteLine("Error loading from local storage: " + ex);
             }
         }
 
@@ -157,8 +159,7 @@ namespace FOSDEM
                 LoadFromXml(xml);
 
                 var folder = Package.Current.InstalledLocation;
-                string path = "conference.cache";
-                var file = await folder.CreateFileAsync(path);
+                var file = await folder.CreateFileAsync(CacheFileName);
                 XmlSerializer serializer = new XmlSerializer(typeof(Conference));
                 using (Stream writer = await file.OpenStreamForWriteAsync())
                 {
@@ -166,15 +167,30 @@ namespace FOSDEM
                     serializer.Serialize(writer, this.Conference);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-
+                Debug.WriteLine("Error loading from web: " + ex);
             }
         }
 
         private void LoadFromXml(string xml)
         {
-            throw new NotImplementedException();
+            ModelLoader modelLoader = new ModelLoader(xml);
+            modelLoader.Load();
+
+            if (Conference == null)
+                Conference = modelLoader.Conference;
+            else
+            {
+                Conference currentConference = Conference;
+                Conference = modelLoader.Conference;
+                foreach (var newEvent in Conference.Events)
+                {
+                    Event currentEvent = currentConference.Events.FirstOrDefault(item => item.Id == newEvent.Id);
+                    if (currentEvent != null)
+                        newEvent.IsSelected = currentEvent.IsSelected;
+                }
+            }
         }
 
 #if WINDOWS_PHONE_APP
