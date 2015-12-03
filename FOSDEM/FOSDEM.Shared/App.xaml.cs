@@ -1,12 +1,17 @@
-﻿using System;
+﻿using FOSDEM.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.Serialization;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -38,6 +43,8 @@ namespace FOSDEM
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
         }
+
+        public Conference Conference { get; private set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -92,6 +99,8 @@ namespace FOSDEM
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
 #endif
 
+                LoadConferenceDataOnStart();
+
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
@@ -103,6 +112,69 @@ namespace FOSDEM
 
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        private void LoadConferenceDataOnStart()
+        {
+            if (this.Conference == null)
+                LoadFromLocalSorage();
+
+            if (this.Conference == null)
+                LoadFromWeb();
+        }
+
+        private async void LoadFromLocalSorage()
+        {
+            try
+            {
+                var folder = Package.Current.InstalledLocation;
+                string path = "conference.cache";
+                var file = await folder.GetFileAsync(path);
+                var read = await FileIO.ReadTextAsync(file);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(Conference));
+                using (Stream reader = await file.OpenStreamForReadAsync())
+                {
+                    // Call the Deserialize method to restore the object's state.
+                    this.Conference = serializer.Deserialize(reader) as Conference;
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private async void LoadFromWeb()
+        {
+            try
+            {
+                HttpClient http = new System.Net.Http.HttpClient();
+                string url = "https://archive.fosdem.org/2015/schedule/xml";
+                HttpResponseMessage response = await http.GetAsync(url);
+                string xml = await response.Content.ReadAsStringAsync();
+
+                LoadFromXml(xml);
+
+                var folder = Package.Current.InstalledLocation;
+                string path = "conference.cache";
+                var file = await folder.CreateFileAsync(path);
+                XmlSerializer serializer = new XmlSerializer(typeof(Conference));
+                using (Stream writer = await file.OpenStreamForWriteAsync())
+                {
+                    // Call the Deserialize method to restore the object's state.
+                    serializer.Serialize(writer, this.Conference);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void LoadFromXml(string xml)
+        {
+            throw new NotImplementedException();
         }
 
 #if WINDOWS_PHONE_APP
