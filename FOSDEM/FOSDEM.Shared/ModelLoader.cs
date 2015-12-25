@@ -25,10 +25,11 @@ namespace FOSDEM
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(xml);
 
-            IXmlNode nodeConference = xDoc.SelectSingleNode("conference");
+            IXmlNode nodeSchedule = xDoc.SelectSingleNode("schedule");
+            IXmlNode nodeConference = nodeSchedule.SelectSingleNode("conference");
             LoadConferenceData(nodeConference);
 
-            XmlNodeList nodesDays = xDoc.SelectNodes("day");
+            XmlNodeList nodesDays = nodeSchedule.SelectNodes("day");
             foreach (IXmlNode item in nodesDays)
             {
                 LoadConferenceDayData(item);

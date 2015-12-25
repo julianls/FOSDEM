@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -55,7 +56,7 @@ namespace FOSDEM
         /// search results, and so forth.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
@@ -102,7 +103,7 @@ namespace FOSDEM
                 rootFrame.Navigated += this.RootFrame_FirstNavigated;
 #endif
 
-                LoadConferenceDataOnStart();
+                await LoadConferenceDataOnStart();
 
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
@@ -117,16 +118,16 @@ namespace FOSDEM
             Window.Current.Activate();
         }
 
-        private void LoadConferenceDataOnStart()
+        private async Task LoadConferenceDataOnStart()
         {
             if (Conference == null)
-                LoadFromLocalSorage();
+                await LoadFromLocalSorage();
 
             if (Conference == null)
-                LoadFromWeb();
+                await LoadFromWeb();
         }
 
-        private async void LoadFromLocalSorage()
+        private async Task LoadFromLocalSorage()
         {
             try
             {
@@ -147,7 +148,7 @@ namespace FOSDEM
             }
         }
 
-        private async void LoadFromWeb()
+        private async Task LoadFromWeb()
         {
             try
             {

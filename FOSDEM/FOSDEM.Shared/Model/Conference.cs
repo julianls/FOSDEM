@@ -6,8 +6,18 @@ namespace FOSDEM.Model
 {
     public class Conference
     {
-        //<title>FOSDEM 2016</title>
-        public string Title { get; set; }
+        public Conference()
+        {
+            EventTypes = new List<EventType>();
+            Tracks = new List<Track>();
+            Persons = new List<Person>();
+            Rooms = new List<Room>();
+            Days = new List<Day>();
+            Events = new List<Event>();
+        }
+
+    //<title>FOSDEM 2016</title>
+    public string Title { get; set; }
 
         //<subtitle/>
         public string Subtitle { get; set; }

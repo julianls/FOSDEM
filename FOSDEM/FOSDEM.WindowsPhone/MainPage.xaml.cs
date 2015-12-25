@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -25,24 +26,25 @@ namespace FOSDEM
         public MainPage()
         {
             this.InitializeComponent();
-
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.
-        /// This parameter is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        partial void OnNavigateSpecial()
         {
-            // TODO: Prepare page for display here.
+            //ListViewHome.ItemsSource = this.model.HeaderEvents.View;
+            //ListViewFirstDay.ItemsSource = this.model.FirstDayEvents.View;
+            //ListViewSecondDay.ItemsSource = this.model.SecondDayEvents.View;
 
-            // TODO: If your application contains multiple pages, ensure that you are
-            // handling the hardware Back button by registering for the
-            // Windows.Phone.UI.Input.HardwareButtons.BackPressed event.
-            // If you are using the NavigationHelper provided by some templates,
-            // this event is handled for you.
+            MapControl.Center =
+                new Geopoint(new BasicGeoposition()
+                {
+                    Latitude = 50.812375,
+                    Longitude = 4.380734
+                });
+
+            MapControl.ZoomLevel = 14;
+            MapControl.LandmarksVisible = true;
+            MapControl.Style = Windows.UI.Xaml.Controls.Maps.MapStyle.AerialWithRoads;
         }
     }
 }
