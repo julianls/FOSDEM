@@ -48,7 +48,9 @@ namespace FOSDEM
             this.Suspending += this.OnSuspending;
         }
 
-        public Conference Conference { get; private set; }
+        public static Conference Conference { get; private set; }
+
+        public static RuntimeModel Model { get; private set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -118,16 +120,45 @@ namespace FOSDEM
             Window.Current.Activate();
         }
 
-        private async Task LoadConferenceDataOnStart()
+        internal static async Task SaveModel()
+        {
+
+            var folder = Package.Current.InstalledLocation;
+
+            StorageFile file = null;
+
+            try
+            {
+                file = await folder.GetFileAsync(CacheFileName);
+                await file.DeleteAsync();
+            }
+            catch
+            {
+
+            }
+
+            file = await folder.CreateFileAsync(CacheFileName);
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Conference));
+            using (Stream writer = await file.OpenStreamForWriteAsync())
+            {
+                // Call the Deserialize method to restore the object's state.
+                serializer.Serialize(writer, Conference);
+            }
+        }
+
+        private static async Task LoadConferenceDataOnStart()
         {
             if (Conference == null)
                 await LoadFromLocalSorage();
 
             if (Conference == null)
                 await LoadFromWeb();
+
+            Model = new RuntimeModel(App.Conference);
         }
 
-        private async Task LoadFromLocalSorage()
+        private static async Task LoadFromLocalSorage()
         {
             try
             {
@@ -139,7 +170,7 @@ namespace FOSDEM
                 using (Stream reader = await file.OpenStreamForReadAsync())
                 {
                     // Call the Deserialize method to restore the object's state.
-                    this.Conference = serializer.Deserialize(reader) as Conference;
+                    Conference = serializer.Deserialize(reader) as Conference;
                 }
             }
             catch (Exception ex)
@@ -148,25 +179,19 @@ namespace FOSDEM
             }
         }
 
-        private async Task LoadFromWeb()
+        private static async Task LoadFromWeb()
         {
             try
             {
                 HttpClient http = new System.Net.Http.HttpClient();
-                string url = "https://archive.fosdem.org/2015/schedule/xml";
+                //string url = "https://archive.fosdem.org/2015/schedule/xml";
+                string url = "https://fosdem.org/2016/schedule/xml";
                 HttpResponseMessage response = await http.GetAsync(url);
                 string xml = await response.Content.ReadAsStringAsync();
 
                 LoadFromXml(xml);
 
-                var folder = Package.Current.InstalledLocation;
-                var file = await folder.CreateFileAsync(CacheFileName);
-                XmlSerializer serializer = new XmlSerializer(typeof(Conference));
-                using (Stream writer = await file.OpenStreamForWriteAsync())
-                {
-                    // Call the Deserialize method to restore the object's state.
-                    serializer.Serialize(writer, this.Conference);
-                }
+                await SaveModel();
             }
             catch (Exception ex)
             {
@@ -174,7 +199,7 @@ namespace FOSDEM
             }
         }
 
-        private void LoadFromXml(string xml)
+        private static void LoadFromXml(string xml)
         {
             ModelLoader modelLoader = new ModelLoader(xml);
             modelLoader.Load();
@@ -193,6 +218,14 @@ namespace FOSDEM
                 }
             }
         }
+
+        internal static async Task Refresh()
+        {
+            await LoadFromWeb();
+
+            Model = new RuntimeModel(App.Conference);
+        }
+
 
 #if WINDOWS_PHONE_APP
         /// <summary>
@@ -221,6 +254,27 @@ namespace FOSDEM
 
             // TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        public static bool IsOnlyGoingVisible
+        {
+            get
+            {
+                var applicationData = Windows.Storage.ApplicationData.Current;
+                var localSettings = applicationData.LocalSettings;
+
+                if (localSettings.Values.ContainsKey("IsOnlyGoingVisible"))
+                    return (bool)localSettings.Values["IsOnlyGoingVisible"];
+
+                return false;
+            }
+
+            set
+            {
+                var applicationData = Windows.Storage.ApplicationData.Current;
+                var localSettings = applicationData.LocalSettings;
+                localSettings.Values["IsOnlyGoingVisible"] = value;
+            }
         }
     }
 }

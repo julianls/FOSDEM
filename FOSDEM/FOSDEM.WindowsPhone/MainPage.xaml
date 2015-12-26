@@ -9,7 +9,25 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
-        <DataTemplate x:Key="GroupTemplate">
+        <DataTemplate x:Key="EventItemTemplate">
+            <Grid Margin="0,0,0,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{Binding Title}" FontSize="18" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Start}" TextWrapping="Wrap" />
+                </StackPanel>
+                <Rectangle Grid.Column="1" Grid.Row="1" Opacity="0.7" Height="1" Fill="{ThemeResource ApplicationForegroundThemeBrush}"></Rectangle>
+                <Rectangle Visibility="{Binding SelectedVisibility}" Grid.Column="0" Grid.RowSpan="2" Width="5" Fill="DeepSkyBlue"></Rectangle>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="HomeEventItemTemplate">
             <Grid Margin="0,0,0,10">
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -38,36 +56,38 @@
                     <Image Source="Assets/fosdem-home-visual.jpg" Height="100" Stretch="Uniform" />
                     <Image Source="Assets/fosdembg.png" Height="50" Stretch="Uniform" />
                     <TextBlock Text="Brussels / 30 &amp; 31 January 2016" 
-                                TextAlignment="Center" 
-                                VerticalAlignment="Bottom" 
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Margin="0,0,0,10" />
+                            TextAlignment="Center" 
+                            VerticalAlignment="Bottom" 
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Margin="0,0,0,10" />
                 </Grid>
                 <ListView x:Name="ListViewHome" 
                           Grid.Row="1" 
+                          IsItemClickEnabled="True"
                           ItemsSource="{Binding HeaderEvents.View}" 
-                        ItemTemplate="{StaticResource GroupTemplate}"
+                          ItemTemplate="{StaticResource HomeEventItemTemplate}"
                           ItemClick="ListView_ItemClick"/>
                 <Maps:MapControl x:Name="MapControl" 
-                                 Grid.Row="2" 
-                                 Height="150"
-                                 MapServiceToken="AiRM1jvPO_eIZoJOnosVcfJduSQqrv9c1LB9yPtuPc8lqdWaI-FBLsBjWb651bjb" />
+                                Grid.Row="2" 
+                                Height="150"
+                                MapServiceToken="AiRM1jvPO_eIZoJOnosVcfJduSQqrv9c1LB9yPtuPc8lqdWaI-FBLsBjWb651bjb" />
             </Grid>
         </PivotItem>
         <PivotItem Header="Day 1">
             <SemanticZoom>
                 <SemanticZoom.ZoomedInView>
-                    <ListView 
-                        ItemTemplate="{StaticResource GroupTemplate}"
-                        ItemsSource="{Binding FirstDayEvents.View}"
-                        ItemsPanel="{StaticResource ListViewItemsPanel}">
+                    <ListView ItemClick="ListView_ItemClick"
+                              IsItemClickEnabled="True"
+                              ItemTemplate="{StaticResource EventItemTemplate}"
+                              ItemsSource="{Binding FirstDayEvents.View}"
+                              ItemsPanel="{StaticResource ListViewItemsPanel}">
                         <ListView.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding KeyDisplay}" 
-                                                   FontSize="32" />
+                                                FontSize="32" />
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
                             </GroupStyle>
@@ -81,7 +101,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Group.KeyDisplay}" 
-                                           FontSize="32" />
+                                        FontSize="32" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -91,16 +111,17 @@
         <PivotItem Header="Day 2">
             <SemanticZoom>
                 <SemanticZoom.ZoomedInView>
-                    <ListView 
-                        ItemTemplate="{StaticResource GroupTemplate}"
-                        ItemsSource="{Binding SecondDayEvents.View}"
-                        ItemsPanel="{StaticResource ListViewItemsPanel}">
+                    <ListView ItemClick="ListView_ItemClick"
+                              IsItemClickEnabled="True"
+                              ItemTemplate="{StaticResource EventItemTemplate}"
+                              ItemsSource="{Binding SecondDayEvents.View}"
+                              ItemsPanel="{StaticResource ListViewItemsPanel}">
                         <ListView.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding KeyDisplay}" 
-                                                   FontSize="32" />
+                                                FontSize="32" />
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
                             </GroupStyle>
@@ -108,13 +129,13 @@
                     </ListView>
                 </SemanticZoom.ZoomedInView>
                 <SemanticZoom.ZoomedOutView>
-                    <ListView  Padding="20"
-                               ItemsSource="{Binding SecondDayEvents.View.CollectionGroups}"
-                               Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <ListView Padding="20"
+                              ItemsSource="{Binding SecondDayEvents.View.CollectionGroups}"
+                              Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Group.KeyDisplay}" 
-                                           FontSize="32" />
+                                        FontSize="32" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -122,4 +143,21 @@
             </SemanticZoom>
         </PivotItem>
     </Pivot>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarToggleButton Label="Going Only" 
+                                    IsChecked="{Binding IsOnlyGoingVisible}"
+                                    Checked="AppBarToggleButtonFilter_Checked" 
+                                    Unchecked="AppBarToggleButtonFilter_Unchecked">
+                    <AppBarToggleButton.Icon>
+                        <SymbolIcon Symbol="Filter"/>
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+            </CommandBar.PrimaryCommands>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Label="Refresh" Click="AppBarButtonRefresh_Click" />
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)DetailPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JumpListGroup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JumpListHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.cs" />
@@ -23,9 +24,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Day.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Event.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\EventType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\Link.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Person.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Room.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Track.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RichTextBlockHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RuntimeModel.cs" />
   </ItemGroup>
 </Project>

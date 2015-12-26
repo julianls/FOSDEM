@@ -16,8 +16,8 @@ namespace FOSDEM.Model
             Events = new List<Event>();
         }
 
-    //<title>FOSDEM 2016</title>
-    public string Title { get; set; }
+        //<title>FOSDEM 2016</title>
+        public string Title { get; set; }
 
         //<subtitle/>
         public string Subtitle { get; set; }

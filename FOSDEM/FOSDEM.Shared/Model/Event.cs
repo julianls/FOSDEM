@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
+using Windows.UI.Xaml;
 
 namespace FOSDEM.Model
 {
@@ -34,8 +36,41 @@ namespace FOSDEM.Model
 
         public List<Person> Persons { get; set; }
 
-        public List<string> Links { get; set; }
+        public List<Link> Links { get; set; }
 
         public bool IsSelected { get; set; }
+
+        [XmlIgnore]
+        public string DayOfWeek { get { return Start.DayOfWeek.ToString(); } }
+
+        [XmlIgnore]
+        public string StartHour { get { return Start.TimeOfDay.ToString(); } }
+
+        [XmlIgnore]
+        public string EndHour { get { return Start.Add(Duration).TimeOfDay.ToString(); } }
+
+        [XmlIgnore]
+        public Visibility SelectedVisibility { get { return IsSelected ? Visibility.Visible : Visibility.Collapsed; } }
+
+        [XmlIgnore]
+        public string ImagePath
+        {
+            get
+            {
+                switch (Room.Name.ToUpper()[0])
+                {
+                    case 'J':
+                        return @"Assets/buildingj.png";
+                    case 'K':
+                        return @"Assets/buildingk.png";
+                    case 'H':
+                        return @"Assets/buildingh.png";
+                    case 'U':
+                        return @"Assets/buildingu.png";
+                    default:
+                        return @"Assets/buildingaw.png";
+                }
+            }
+        }
     }
 }

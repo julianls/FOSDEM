@@ -109,17 +109,24 @@ namespace FOSDEM
             conferemceEvent.Abstract = nodeEvent.SelectSingleNode("abstract").InnerText;
             conferemceEvent.Description = nodeEvent.SelectSingleNode("description").InnerText;
 
-            XmlNodeList nodesPersons = nodeEvent.SelectNodes("person");
-            foreach (IXmlNode item in nodesPersons)
+            conferemceEvent.Persons = new List<Person>();
+            IXmlNode nodesPersons = nodeEvent.SelectSingleNode("persons");
+            XmlNodeList nodesPersonList = nodesPersons.SelectNodes("person");
+            foreach (IXmlNode item in nodesPersonList)
             {
                 Person person = LoadConferencePersonData(item);
                 conferemceEvent.Persons.Add(person);
             }
 
-            XmlNodeList nodesLinks = nodeEvent.SelectNodes("link");
-            foreach (IXmlNode item in nodesLinks)
+            conferemceEvent.Links = new List<Link>();
+            IXmlNode nodesLinks = nodeEvent.SelectSingleNode("links");
+            XmlNodeList nodesLinkList = nodesLinks.SelectNodes("link");
+            foreach (IXmlNode item in nodesLinkList)
             {
-                conferemceEvent.Links.Add(item.Attributes.GetNamedItem("href").InnerText + "|"+ item.InnerText);
+                Link link = new Link();
+                link.Name = item.InnerText;
+                link.Url = item.Attributes.GetNamedItem("href").InnerText;
+                conferemceEvent.Links.Add(link);
             }
 
             Conference.Events.Add(conferemceEvent);

@@ -31,10 +31,6 @@ namespace FOSDEM
 
         partial void OnNavigateSpecial()
         {
-            //ListViewHome.ItemsSource = this.model.HeaderEvents.View;
-            //ListViewFirstDay.ItemsSource = this.model.FirstDayEvents.View;
-            //ListViewSecondDay.ItemsSource = this.model.SecondDayEvents.View;
-
             MapControl.Center =
                 new Geopoint(new BasicGeoposition()
                 {
