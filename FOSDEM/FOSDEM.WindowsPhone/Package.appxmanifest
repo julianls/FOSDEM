@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="cfc6a922-df83-415f-bcbc-61c20fd199bc" Publisher="CN=julian" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="cfc6a922-df83-415f-bcbc-61c20fd199bc" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="46941JulianMadeIt.FOSDEM" Publisher="CN=1EA7650B-C750-41A5-9801-B0DC924D9E79" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="042fb106-c7e6-459c-b16e-94e3d8ea64a7" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>FOSDEM.WindowsPhone</DisplayName>
-    <PublisherDisplayName>julian</PublisherDisplayName>
+    <DisplayName>FOSDEM</DisplayName>
+    <PublisherDisplayName>Julian Made It</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
