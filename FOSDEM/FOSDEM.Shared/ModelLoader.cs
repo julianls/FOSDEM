@@ -82,43 +82,43 @@ namespace FOSDEM
 
         private void LoadConferenceEventData(IXmlNode nodeEvent, Day day, Room room)
         {
-            Event conferemceEvent = new Event();
-            conferemceEvent.Id = nodeEvent.Attributes.GetNamedItem("id").InnerText;
-            conferemceEvent.Start = DateTime.Parse(nodeEvent.SelectSingleNode("start").InnerText);
-            conferemceEvent.Duration = TimeSpan.Parse(nodeEvent.SelectSingleNode("duration").InnerText);
-            conferemceEvent.Room = room;
-            conferemceEvent.Day = day;
-            conferemceEvent.Slug = nodeEvent.SelectSingleNode("slug").InnerText;
-            conferemceEvent.Title = nodeEvent.SelectSingleNode("title").InnerText;
-            conferemceEvent.Subtitle = nodeEvent.SelectSingleNode("subtitle").InnerText;
+            Event conferenceEvent = new Event();
+            conferenceEvent.Id = nodeEvent.Attributes.GetNamedItem("id").InnerText;
+            conferenceEvent.Start = day.Date.Add(DateTime.Parse(nodeEvent.SelectSingleNode("start").InnerText).TimeOfDay);
+            conferenceEvent.Duration = TimeSpan.Parse(nodeEvent.SelectSingleNode("duration").InnerText);
+            conferenceEvent.Room = room;
+            conferenceEvent.Day = day;
+            conferenceEvent.Slug = nodeEvent.SelectSingleNode("slug").InnerText;
+            conferenceEvent.Title = nodeEvent.SelectSingleNode("title").InnerText;
+            conferenceEvent.Subtitle = nodeEvent.SelectSingleNode("subtitle").InnerText;
             string trackName = nodeEvent.SelectSingleNode("track").InnerText;
-            conferemceEvent.Track = Conference.Tracks.FirstOrDefault(item => item.Name == trackName);
-            if (conferemceEvent.Track == null)
+            conferenceEvent.Track = Conference.Tracks.FirstOrDefault(item => item.Name == trackName);
+            if (conferenceEvent.Track == null)
             {
-                conferemceEvent.Track = new Track() { Name = trackName };
-                Conference.Tracks.Add(conferemceEvent.Track);
+                conferenceEvent.Track = new Track() { Name = trackName };
+                Conference.Tracks.Add(conferenceEvent.Track);
             }
             string typeName = nodeEvent.SelectSingleNode("type").InnerText;
-            conferemceEvent.Type = Conference.EventTypes.FirstOrDefault(item => item.Name == typeName);
-            if (conferemceEvent.Type == null)
+            conferenceEvent.Type = Conference.EventTypes.FirstOrDefault(item => item.Name == typeName);
+            if (conferenceEvent.Type == null)
             {
-                conferemceEvent.Type = new EventType() { Name = typeName };
-                Conference.EventTypes.Add(conferemceEvent.Type);
+                conferenceEvent.Type = new EventType() { Name = typeName };
+                Conference.EventTypes.Add(conferenceEvent.Type);
             }
-            conferemceEvent.Language = nodeEvent.SelectSingleNode("language").InnerText;
-            conferemceEvent.Abstract = nodeEvent.SelectSingleNode("abstract").InnerText;
-            conferemceEvent.Description = nodeEvent.SelectSingleNode("description").InnerText;
+            conferenceEvent.Language = nodeEvent.SelectSingleNode("language").InnerText;
+            conferenceEvent.Abstract = nodeEvent.SelectSingleNode("abstract").InnerText;
+            conferenceEvent.Description = nodeEvent.SelectSingleNode("description").InnerText;
 
-            conferemceEvent.Persons = new List<Person>();
+            conferenceEvent.Persons = new List<Person>();
             IXmlNode nodesPersons = nodeEvent.SelectSingleNode("persons");
             XmlNodeList nodesPersonList = nodesPersons.SelectNodes("person");
             foreach (IXmlNode item in nodesPersonList)
             {
                 Person person = LoadConferencePersonData(item);
-                conferemceEvent.Persons.Add(person);
+                conferenceEvent.Persons.Add(person);
             }
 
-            conferemceEvent.Links = new List<Link>();
+            conferenceEvent.Links = new List<Link>();
             IXmlNode nodesLinks = nodeEvent.SelectSingleNode("links");
             XmlNodeList nodesLinkList = nodesLinks.SelectNodes("link");
             foreach (IXmlNode item in nodesLinkList)
@@ -126,10 +126,10 @@ namespace FOSDEM
                 Link link = new Link();
                 link.Name = item.InnerText;
                 link.Url = item.Attributes.GetNamedItem("href").InnerText;
-                conferemceEvent.Links.Add(link);
+                conferenceEvent.Links.Add(link);
             }
 
-            Conference.Events.Add(conferemceEvent);
+            Conference.Events.Add(conferenceEvent);
         }
 
         private Person LoadConferencePersonData(IXmlNode nodePerson)

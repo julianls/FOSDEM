@@ -122,28 +122,36 @@ namespace FOSDEM
 
         internal static async Task SaveModel()
         {
-
-            var folder = Package.Current.InstalledLocation;
-
-            StorageFile file = null;
-
             try
             {
-                file = await folder.GetFileAsync(CacheFileName);
-                await file.DeleteAsync();
+
+                var applicationData = Windows.Storage.ApplicationData.Current;
+                var folder = applicationData.LocalFolder;
+
+                StorageFile file = null;
+
+                try
+                {
+                    file = await folder.GetFileAsync(CacheFileName);
+                    await file.DeleteAsync();
+                }
+                catch
+                {
+
+                }
+
+                file = await folder.CreateFileAsync(CacheFileName);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(Conference));
+                using (Stream writer = await file.OpenStreamForWriteAsync())
+                {
+                    // Call the Deserialize method to restore the object's state.
+                    serializer.Serialize(writer, Conference);
+                }
             }
             catch
             {
-
-            }
-
-            file = await folder.CreateFileAsync(CacheFileName);
-
-            XmlSerializer serializer = new XmlSerializer(typeof(Conference));
-            using (Stream writer = await file.OpenStreamForWriteAsync())
-            {
-                // Call the Deserialize method to restore the object's state.
-                serializer.Serialize(writer, Conference);
+                throw new Exception("Failed to save model");
             }
         }
 
@@ -162,9 +170,10 @@ namespace FOSDEM
         {
             try
             {
-                var folder = Package.Current.InstalledLocation;
+                var applicationData = Windows.Storage.ApplicationData.Current;
+                var folder = applicationData.LocalFolder;
                 var file = await folder.GetFileAsync(CacheFileName);
-                var read = await FileIO.ReadTextAsync(file);
+                //var read = await FileIO.ReadTextAsync(file);
 
                 XmlSerializer serializer = new XmlSerializer(typeof(Conference));
                 using (Stream reader = await file.OpenStreamForReadAsync())
