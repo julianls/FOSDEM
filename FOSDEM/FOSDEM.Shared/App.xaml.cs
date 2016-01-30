@@ -137,7 +137,7 @@ namespace FOSDEM
                 }
                 catch
                 {
-
+                    Debug.WriteLine("No file found");
                 }
 
                 file = await folder.CreateFileAsync(CacheFileName);
@@ -151,7 +151,7 @@ namespace FOSDEM
             }
             catch
             {
-                throw new Exception("Failed to save model");
+                Debug.WriteLine("Failed to save model");
             }
         }
 
@@ -170,7 +170,7 @@ namespace FOSDEM
         {
             try
             {
-                var applicationData = Windows.Storage.ApplicationData.Current;
+                var applicationData = ApplicationData.Current;
                 var folder = applicationData.LocalFolder;
                 var file = await folder.GetFileAsync(CacheFileName);
                 //var read = await FileIO.ReadTextAsync(file);
@@ -192,7 +192,7 @@ namespace FOSDEM
         {
             try
             {
-                HttpClient http = new System.Net.Http.HttpClient();
+                HttpClient http = new HttpClient();
                 //string url = "https://archive.fosdem.org/2015/schedule/xml";
                 string url = "https://fosdem.org/2016/schedule/xml";
                 HttpResponseMessage response = await http.GetAsync(url);
