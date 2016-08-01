@@ -55,7 +55,7 @@
                 <Grid>
                     <Image Source="Assets/fosdem-home-visual.jpg" Height="100" Stretch="Uniform" />
                     <Image Source="Assets/fosdembg.png" Height="50" Stretch="Uniform" />
-                    <TextBlock Text="Brussels / 30 &amp; 31 January 2016" 
+                    <TextBlock Text="Brussels / 4 &amp; 5 February 2017" 
                             TextAlignment="Center" 
                             VerticalAlignment="Bottom" 
                             Foreground="White"
