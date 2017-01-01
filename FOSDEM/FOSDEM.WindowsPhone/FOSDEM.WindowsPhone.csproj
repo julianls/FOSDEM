@@ -106,6 +106,7 @@
     <Content Include="Assets\buildingu.png" />
     <Content Include="Assets\fosdem-home-visual.jpg" />
     <Content Include="Assets\fosdembg.png" />
+    <Content Include="Assets\initial.xml" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />

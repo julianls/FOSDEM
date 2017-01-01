@@ -27,6 +27,14 @@ namespace FOSDEM
 
         public CollectionViewSource SecondDayEvents { get; private set; }
 
+        public bool IsEmptyHeader
+        {
+            get
+            {
+                return HeaderEvents.View.Count == 0;
+            }
+        }
+
         public bool IsOnlyGoingVisible
         {   get
             {
@@ -55,6 +63,9 @@ namespace FOSDEM
             SecondDayEvents = new CollectionViewSource() { Source = secondDayEvents.ToGroups(x => x.Start, x => x.Track.Name), IsSourceGrouped = true };
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("SecondDayEvents"));
+
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("IsEmptyHeader"));
         }
 
         private bool isVisibleEvent(Event e, int dayIndex)

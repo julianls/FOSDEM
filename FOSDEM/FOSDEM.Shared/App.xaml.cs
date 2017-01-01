@@ -163,7 +163,31 @@ namespace FOSDEM
             if (Conference == null)
                 await LoadFromWeb();
 
+            if (Conference == null)
+                await LoadFromInit();
+
             Model = new RuntimeModel(App.Conference);
+        }
+
+        private static async Task LoadFromInit()
+        {
+            try
+            {
+                string CountriesFile = @"Assets\initial.xml";
+                StorageFolder InstallationFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                StorageFile file = await InstallationFolder.GetFileAsync(CountriesFile);
+
+                XmlSerializer serializer = new XmlSerializer(typeof(Conference));
+                using (Stream reader = await file.OpenStreamForReadAsync())
+                {
+                    // Call the Deserialize method to restore the object's state.
+                    Conference = serializer.Deserialize(reader) as Conference;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error loading from initial storage: " + ex);
+            }
         }
 
         private static async Task LoadFromLocalSorage()

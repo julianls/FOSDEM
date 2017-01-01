@@ -43,12 +43,14 @@
         <ItemsPanelTemplate x:Key="ListViewItemsPanel">
             <ItemsStackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>
+        <local:BooleanToVisibilityConverter x:Key="TrueToVisibleConverter" />
     </Page.Resources>
-    <Pivot Title="FOSDEM'16">
+    <Pivot Name="PivotMain" Title="FOSDEM'17">
         <PivotItem Header="Wellcome">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
@@ -62,14 +64,22 @@
                             FontWeight="Bold"
                             Margin="0,0,0,10" />
                 </Grid>
+                <TextBlock Grid.Row="1" TextAlignment="Center" FontSize="32" Text="My Schedule"></TextBlock>
                 <ListView x:Name="ListViewHome" 
-                          Grid.Row="1" 
+                          Grid.Row="2"
+                          Padding="0,10,0,0"
                           IsItemClickEnabled="True"
                           ItemsSource="{Binding HeaderEvents.View}" 
                           ItemTemplate="{StaticResource HomeEventItemTemplate}"
                           ItemClick="ListView_ItemClick"/>
+                <Grid Grid.Row="2" Visibility="{Binding IsEmptyHeader, Converter={StaticResource TrueToVisibleConverter}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock TextAlignment="Center" FontSize="32" Text="Your schedule will go here!"></TextBlock>
+                        <Button VerticalAlignment="Center" Content="Refresh data from web ->" Click="ButtonRefresh_Click"></Button>
+                    </StackPanel>
+                </Grid>
                 <Maps:MapControl x:Name="MapControl" 
-                                Grid.Row="2" 
+                                Grid.Row="3" 
                                 Height="150"
                                 MapServiceToken="AiRM1jvPO_eIZoJOnosVcfJduSQqrv9c1LB9yPtuPc8lqdWaI-FBLsBjWb651bjb" />
             </Grid>
