@@ -45,8 +45,8 @@
         </ItemsPanelTemplate>
         <local:BooleanToVisibilityConverter x:Key="TrueToVisibleConverter" />
     </Page.Resources>
-    <Pivot Name="PivotMain" Title="FOSDEM'17">
-        <PivotItem Header="Wellcome">
+    <Pivot Name="PivotMain" Title="FOSDEM'18">
+        <PivotItem Header="Welcome">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"></RowDefinition>
@@ -57,7 +57,7 @@
                 <Grid>
                     <Image Source="Assets/fosdem-home-visual.jpg" Height="100" Stretch="Uniform" />
                     <Image Source="Assets/fosdembg.png" Height="50" Stretch="Uniform" />
-                    <TextBlock Text="Brussels / 4 &amp; 5 February 2017" 
+                    <TextBlock Text="Brussels / 3 &amp; 4 February 2018" 
                             TextAlignment="Center" 
                             VerticalAlignment="Bottom" 
                             Foreground="White"
@@ -156,7 +156,7 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.PrimaryCommands>
-                <AppBarToggleButton Label="Going Only" 
+                <AppBarToggleButton Label="My List" 
                                     IsChecked="{Binding IsOnlyGoingVisible}"
                                     Checked="AppBarToggleButtonFilter_Checked" 
                                     Unchecked="AppBarToggleButtonFilter_Unchecked">
