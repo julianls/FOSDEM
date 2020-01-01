@@ -67,6 +67,8 @@ namespace FOSDEM.Model
                         return @"Assets/buildingh.png";
                     case 'U':
                         return @"Assets/buildingu.png";
+                    case 'S':
+                        return @"Assets/buildings.png";
                     default:
                         return @"Assets/buildingaw.png";
                 }

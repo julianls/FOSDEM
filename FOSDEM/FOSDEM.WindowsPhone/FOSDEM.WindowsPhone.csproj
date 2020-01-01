@@ -100,6 +100,7 @@
     <Content Include="Assets\buildingh.png" />
     <Content Include="Assets\buildingj.png" />
     <Content Include="Assets\buildingk.png" />
+    <Content Include="Assets\buildings.png" />
     <Content Include="Assets\buildingu.png" />
     <Content Include="Assets\fosdem-home-visual.jpg" />
     <Content Include="Assets\fosdembg.png" />

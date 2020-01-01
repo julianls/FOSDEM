@@ -45,7 +45,7 @@
         </ItemsPanelTemplate>
         <local:BooleanToVisibilityConverter x:Key="TrueToVisibleConverter" />
     </Page.Resources>
-    <Pivot Name="PivotMain" Title="FOSDEM'18">
+    <Pivot Name="PivotMain" Title="FOSDEM'2020">
         <PivotItem Header="Welcome">
             <Grid>
                 <Grid.RowDefinitions>
@@ -57,7 +57,7 @@
                 <Grid>
                     <Image Source="Assets/fosdem-home-visual.jpg" Height="100" Stretch="Uniform" />
                     <Image Source="Assets/fosdembg.png" Height="50" Stretch="Uniform" />
-                    <TextBlock Text="Brussels / 3 &amp; 4 February 2018" 
+                    <TextBlock Text="Brussels / 1 &amp; 2 February 2020" 
                             TextAlignment="Center" 
                             VerticalAlignment="Bottom" 
                             Foreground="White"

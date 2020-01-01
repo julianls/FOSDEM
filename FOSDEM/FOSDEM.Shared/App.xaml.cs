@@ -217,7 +217,7 @@ namespace FOSDEM
             try
             {
                 HttpClient http = new HttpClient();
-                string url = "https://fosdem.org/2019/schedule/xml";
+                string url = $"https://fosdem.org/{DateTime.Now.Year}/schedule/xml";
                 HttpResponseMessage response = await http.GetAsync(url);
                 string xml = await response.Content.ReadAsStringAsync();
 
